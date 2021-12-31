@@ -46,7 +46,7 @@ def register():
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
         return redirect(url_for("profile", username=session["user"]))
-        
+
     return render_template("register.html")
 
 
@@ -117,6 +117,14 @@ def add_task():
 
     categories = mongo.db.categories.find().sort("category_name", 1)
     return render_template("add_task.html", categories=categories)
+
+
+@app.route("/edit_task/<task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    return render_template("edit_task.html", task=task, categories=categories)
 
 
 if __name__ == "__main__":
